@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/anime_view.dart';
 import '../widgets/app_scaffold.dart';
+import '../widgets/genre_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -27,7 +29,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            //search bar
+            // Search Bar
             Padding(
               padding: EdgeInsets.all(screenWidth * 0.04),
               child: Container(
@@ -79,6 +81,10 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
+            GenreList(),
+            SizedBox(height: screenHeight * 0.03),
+            const AnimeView(),
+            SizedBox(height: screenHeight * 0.025),
           ],
         ),
       ),
