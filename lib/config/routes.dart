@@ -19,30 +19,29 @@ class AppRoutes {
 }
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> _shellNavigatorKey =
-    GlobalKey<NavigatorState>();
 
 GoRouter createRouter() {
+  // routes.dart
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: AppRoutes.signIn,
     routes: [
-      //1. Auth Routes
+      // 1. Auth Routes
       GoRoute(
         path: AppRoutes.signIn,
         name: 'sign-in',
-        builder: (context, state) => SignInScreen(),
+        builder: (context, state) => const SignInScreen(),
       ),
       GoRoute(
         path: AppRoutes.signUp,
         name: 'sign-up',
-        builder: (context, state) => SignUpScreen(),
+        builder: (context, state) => const SignUpScreen(),
       ),
 
-      //2. Detail Route
+      // 2. Detail Route
       GoRoute(
         path: '${AppRoutes.details}/:id',
-        name: 'details',
+        name: 'detail',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) {
           final animeId = state.pathParameters['id'] ?? '';
@@ -50,27 +49,38 @@ GoRouter createRouter() {
         },
       ),
 
-      //3. ShellRoute (untuk halaman yg menggunakan Bottom Navigation Bar)
-      ShellRoute(
-        navigatorKey: _shellNavigatorKey,
+      // 3. ShellRoute (Untuk Halaman yang menggunakan Bottom Navigation Bar)
+      StatefulShellRoute.indexedStack(
         builder: (context, state, child) {
-          return BottomNavigationShell(child: child);
+          return BottomNavigationShell(navigationShell: child);
         },
-        routes: [
-          GoRoute(
-            path: AppRoutes.home,
-            name: 'home',
-            builder: (context, state) => const HomeScreen(),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                name: 'home',
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: AppRoutes.favorites,
-            name: 'favorites',
-            builder: (context, state) => const FavoriteScreen(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.favorites,
+                name: 'favorite',
+                builder: (context, state) => const FavoriteScreen(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: AppRoutes.profile,
-            name: 'profile',
-            builder: (context, state) => const ProfileScreen(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.profile,
+                name: 'profile',
+                builder: (context, state) => const ProfileScreen(),
+              ),
+            ],
           ),
         ],
       ),
