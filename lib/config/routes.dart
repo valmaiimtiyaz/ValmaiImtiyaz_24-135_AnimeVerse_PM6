@@ -21,27 +21,26 @@ class AppRoutes {
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 GoRouter createRouter() {
-  // routes.dart
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: AppRoutes.signIn,
     routes: [
-      // 1. Auth Routes
+      //1. Auth Routes
       GoRoute(
         path: AppRoutes.signIn,
         name: 'sign-in',
-        builder: (context, state) => const SignInScreen(),
+        builder: (context, state) => SignInScreen(),
       ),
       GoRoute(
         path: AppRoutes.signUp,
         name: 'sign-up',
-        builder: (context, state) => const SignUpScreen(),
+        builder: (context, state) => SignUpScreen(),
       ),
 
-      // 2. Detail Route
+      //2. Detail Route
       GoRoute(
         path: '${AppRoutes.details}/:id',
-        name: 'detail',
+        name: 'details',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) {
           final animeId = state.pathParameters['id'] ?? '';
@@ -49,12 +48,13 @@ GoRouter createRouter() {
         },
       ),
 
-      // 3. ShellRoute (Untuk Halaman yang menggunakan Bottom Navigation Bar)
+      //3. StatefulShellRoute (Pengganti ShellRoute)
       StatefulShellRoute.indexedStack(
-        builder: (context, state, child) {
-          return BottomNavigationShell(navigationShell: child);
+        builder: (context, state, navigationShell) {
+          return BottomNavigationShell(navigationShell: navigationShell);
         },
         branches: [
+          // Branch 1: Home
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -64,15 +64,17 @@ GoRouter createRouter() {
               ),
             ],
           ),
+          // Branch 2: Favorites
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: AppRoutes.favorites,
-                name: 'favorite',
+                name: 'favorites',
                 builder: (context, state) => const FavoriteScreen(),
               ),
             ],
           ),
+          // Branch 3: Profile
           StatefulShellBranch(
             routes: [
               GoRoute(
